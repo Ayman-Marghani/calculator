@@ -100,6 +100,7 @@ numbersBtns.forEach((btn) => {
     else {
       displayDiv.textContent += btn.textContent;
     }
+    // Handle overflow: use string.length
   });
 });
 

@@ -5,22 +5,21 @@ body {
 }
 
 h1 {
-  background-color: #A5A5A5;
+  background-color: #dee2e6;
+  color: #1a67b3;
   text-align: center;
   padding: 24px;
   margin: 0px;
 }
 
 .display {
-  background-color: #003566;
+  background-color: #1a67b3;
   color: white;
   text-align: center;
   font-size: 32px;
-
   width: 316px;
   padding: 16px 0px;
   margin: 32px auto;
-
   border-radius: 10px;
 }
 
@@ -35,20 +34,31 @@ button {
   background-color: #333333;
   color: #fff;
   font-size: 28px;
-
   height: 70px;
   width: 70px;
   border-radius: 50%;
   border: none;
 }
 
+button:hover {
+  background-color: #4f4f4f;
+}
+
 .bg-gray {
   background-color: #A5A5A5;
+}
+
+.bg-gray:hover {
+  background-color: #b9b9b9;
 }
 
 .bg-orange {
   background-color: #F1A33B;
   font-size: 40px;
+}
+
+.bg-orange:hover {
+  background-color: #eb8e14;
 }
 
 .color-black {
