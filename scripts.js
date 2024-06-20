@@ -33,6 +33,7 @@ function operate(num1, num2, operator) {
 }
 
 // Variables
+const MAX_DIGITS = 15;
 let n1 = 0, n2 = 0, op = "", waitSecNumber = false;
 
 const displayDiv = document.querySelector(".display");
@@ -68,7 +69,11 @@ signBtn.addEventListener("click", () => {
 equalBtn.addEventListener("click", () => {
   if (waitSecNumber) {
     n2 = Number(displayDiv.textContent);
-    const result = operate(n1, n2, op);
+    let result = operate(n1, n2, op);
+    // Handle overflow
+    if (String(result).length > MAX_DIGITS) {
+      result = result.toExponential(5);
+    }
     displayDiv.textContent = result;
     waitSecNumber = false;
   }
@@ -76,12 +81,15 @@ equalBtn.addEventListener("click", () => {
 
 // Floating point button event listener
 floatPointBtn.addEventListener("click", () => {
-  if (displayDiv.textContent === "ERROR") {
-    displayDiv.textContent = "0.";
-  }
-  else {
-    if (!displayDiv.textContent.includes(".")) {
-      displayDiv.textContent += ".";
+  // Handle overflow
+  if (displayDiv.textContent.length < MAX_DIGITS) {
+    if (displayDiv.textContent === "ERROR") {
+      displayDiv.textContent = "0.";
+    }
+    else {
+      if (!displayDiv.textContent.includes(".")) {
+        displayDiv.textContent += ".";
+      }
     }
   }
 });
@@ -89,18 +97,20 @@ floatPointBtn.addEventListener("click", () => {
 // Numbers event listeners
 numbersBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    if (displayDiv.textContent === "ERROR") {
-      displayDiv.textContent = btn.textContent;
-    }
-    else if (displayDiv.textContent === "0") {
-      if (btn.textContent !== "0") {
+    // Handle overflow
+    if (displayDiv.textContent.length < MAX_DIGITS) {
+      if (displayDiv.textContent === "ERROR") {
         displayDiv.textContent = btn.textContent;
       }
+      else if (displayDiv.textContent === "0") {
+        if (btn.textContent !== "0") {
+          displayDiv.textContent = btn.textContent;
+        }
+      }
+      else {
+        displayDiv.textContent += btn.textContent;
+      }
     }
-    else {
-      displayDiv.textContent += btn.textContent;
-    }
-    // Handle overflow: use string.length
   });
 });
 
@@ -111,7 +121,6 @@ operatorsBtns.forEach((btn) => {
       op = btn.textContent;
       n1 = Number(displayDiv.textContent);
       // wait for the second number
-      alert("Enter the second number!");
       waitSecNumber = true;
       displayDiv.textContent = "0";
     }
