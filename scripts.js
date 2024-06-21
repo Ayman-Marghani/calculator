@@ -83,7 +83,7 @@ equalBtn.addEventListener("click", () => {
 floatPointBtn.addEventListener("click", () => {
   // Handle overflow
   if (displayDiv.textContent.length < MAX_DIGITS) {
-    if (displayDiv.textContent === "ERROR") {
+    if (isNaN(displayDiv.textContent) || displayDiv.textContent === "Infinity") {
       displayDiv.textContent = "0.";
     }
     else {
@@ -99,7 +99,7 @@ numbersBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
     // Handle overflow
     if (displayDiv.textContent.length < MAX_DIGITS) {
-      if (displayDiv.textContent === "ERROR") {
+      if (isNaN(displayDiv.textContent) || displayDiv.textContent.includes("Infinity")) {
         displayDiv.textContent = btn.textContent;
       }
       else if (displayDiv.textContent === "0") {
