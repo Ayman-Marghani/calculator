@@ -32,9 +32,19 @@ function operate(num1, num2, operator) {
   }
 }
 
+function calcResult(displayContent) {
+  n2 = Number(displayContent);
+  let result = operate(n1, n2, op);
+  // Handle overflow
+  if (String(result).length > MAX_DIGITS) {
+    result = result.toExponential(5);
+  }
+  return result;
+}
+
 // Variables
 const MAX_DIGITS = 15;
-let n1 = 0, n2 = 0, op = "", waitSecNumber = false;
+let n1 = 0, n2 = 0, op = "", waitSecNumber = false, firstDigitEntered = true;
 
 const displayDiv = document.querySelector(".display");
 const clearBtn = document.querySelector(".clear");
@@ -51,11 +61,12 @@ clearBtn.addEventListener("click", () => {
   n1 = 0;
   n2 = 0;
   waitSecNumber = false;
+  firstDigitEntered = true;
 });
 
 // Sign button event listener
 signBtn.addEventListener("click", () => {
-  if (displayDiv.textContent !== "0") {
+  if (displayDiv.textContent !== "0" && firstDigitEntered) {
     if (displayDiv.textContent.includes("-")) {
       displayDiv.textContent = displayDiv.textContent.slice(1);
     }
@@ -68,13 +79,7 @@ signBtn.addEventListener("click", () => {
 // Equal button event listener
 equalBtn.addEventListener("click", () => {
   if (waitSecNumber) {
-    n2 = Number(displayDiv.textContent);
-    let result = operate(n1, n2, op);
-    // Handle overflow
-    if (String(result).length > MAX_DIGITS) {
-      result = result.toExponential(5);
-    }
-    displayDiv.textContent = result;
+    displayDiv.textContent = calcResult(displayDiv.textContent);
     waitSecNumber = false;
   }
 });
@@ -102,10 +107,9 @@ numbersBtns.forEach((btn) => {
       if (isNaN(displayDiv.textContent) || displayDiv.textContent.includes("Infinity")) {
         displayDiv.textContent = btn.textContent;
       }
-      else if (displayDiv.textContent === "0") {
-        if (btn.textContent !== "0") {
-          displayDiv.textContent = btn.textContent;
-        }
+      else if (displayDiv.textContent === "0" || (waitSecNumber && !firstDigitEntered)) {
+        displayDiv.textContent = btn.textContent;
+        firstDigitEntered = true;
       }
       else {
         displayDiv.textContent += btn.textContent;
@@ -117,12 +121,13 @@ numbersBtns.forEach((btn) => {
 // Operators event listeners
 operatorsBtns.forEach((btn) => {
   btn.addEventListener("click", () => {
-    if (!waitSecNumber) {
-      op = btn.textContent;
-      n1 = Number(displayDiv.textContent);
-      // wait for the second number
-      waitSecNumber = true;
-      displayDiv.textContent = "0";
+    if (waitSecNumber) {
+      displayDiv.textContent = calcResult(displayDiv.textContent);
     }
+    op = btn.textContent;
+    n1 = Number(displayDiv.textContent);
+    // wait for the second number
+    waitSecNumber = true;
+    firstDigitEntered = false;
   });
 });
